@@ -1,0 +1,10 @@
+Date: 2025-11-18 10:17:57.292074
+Input: /Users/takizawahidenori/Documents/Projects/1118/project/data/raw/2before_after.csv
+Pairs: 88
+Non-zero differences: 80
+Sign test (PET > CT):
+  positives: 77 / 80
+  p-value: 7.06421e-20
+Wilcoxon signed-rank test (PET > CT):
+  statistic V: 3143.000000
+  p-value: 7.12202e-14

@@ -1,0 +1,10 @@
+Date: 2025-11-18 10:17:54.16439
+Input: /Users/takizawahidenori/Documents/Projects/1118/project/data/raw/1all_data.csv
+Pairs: 176
+Non-zero differences: 130
+Sign test (PET > CT):
+  positives: 120 / 130
+  p-value: 2.13171e-25
+Wilcoxon signed-rank test (PET > CT):
+  statistic V: 7990.500000
+  p-value: 5.30323e-19

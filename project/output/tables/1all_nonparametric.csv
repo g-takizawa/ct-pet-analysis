@@ -1,0 +1,3 @@
+test,statistic,parameter,p_value,note
+Sign (PET > CT),k = 120,n = 130,2.131714710003978e-25,
+Wilcoxon signed-rank (PET > CT),V = 7990.5,pairs = 176,5.303228805284775e-19,

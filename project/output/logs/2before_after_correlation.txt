@@ -1,0 +1,7 @@
+Date: 2025-11-18 10:17:56.579443
+Input: /Users/takizawahidenori/Documents/Projects/1118/project/data/raw/2before_after.csv
+Pearson correlation: 0.416655
+p-value: 5.39291e-05
+95% CI: [0.227024, 0.575846]
+Linear model: CT = -0.362851 + 0.510004 * PET
+Adjusted R-squared: 0.163992
