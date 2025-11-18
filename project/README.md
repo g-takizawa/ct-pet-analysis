@@ -56,3 +56,4 @@ Rscript R/scripts/report_summary.R
 - svglite（SVG 出力用）
 
 必要に応じて `install.packages()` でインストールしてください。
+これ追加
