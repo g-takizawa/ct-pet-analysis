@@ -1,10 +1,23 @@
+# RStudio / R environment
 .Rproj.user/
 .Rhistory
 .RData
 .Ruserdata
 .Renviron
+
+# macOS
+.DS_Store
+
+# renv internal folders
 renv/library/
 renv/staging/
 renv/cache/
-.DS_Store
-project/output/figures/
+
+# Project auto-generated outputs
+project/output/figures/*
+project/output/logs/*
+project/output/tables/*
+project/output/reports/*
+
+# If you want to ignore all outputs entirely:
+# project/output/*
