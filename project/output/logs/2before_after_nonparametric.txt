@@ -1,4 +1,4 @@
-Date: 2025-11-18 10:17:57.292074
+Date: 2025-11-19 11:03:02.031744
 Input: /Users/takizawahidenori/Documents/Projects/1118/project/data/raw/2before_after.csv
 Pairs: 88
 Non-zero differences: 80

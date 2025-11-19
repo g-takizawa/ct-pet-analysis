@@ -7,19 +7,23 @@
 ```sh
 # 1all データ: 散布図＋回帰・相関
 cd path/to/project
-Rscript R/scripts/analyze_1all.R
+Rscript R/scripts/correlation_plots_1all.R
 
-# 1all データ: 符号検定と Wilcoxon 検定（図表つき）
+# 1all データ: CT=0/PET=0 症例を除いた散布図＋回帰・相関
 cd path/to/project
-Rscript R/scripts/tests_1all.R
+Rscript R/scripts/correlation_plots_1all_nozero.R
+
+# 1all データ: PET-CT 差の符号／Wilcoxon 検定（図表つき）
+cd path/to/project
+Rscript R/scripts/nonparametric_tests_1all.R
 
 # 2before_after データ: 散布図＋回帰・相関
 cd path/to/project
-Rscript R/scripts/analyze_2before_after.R
+Rscript R/scripts/correlation_plots_2before_after.R
 
-# 2before_after データ: 符号検定と Wilcoxon 検定（図表つき）
+# 2before_after データ: PET-CT 差の符号／Wilcoxon 検定（図表つき）
 cd path/to/project
-Rscript R/scripts/tests_2before_after.R
+Rscript R/scripts/nonparametric_tests_2before_after.R
 
 # 2データセットをまとめた Markdown レポート
 cd path/to/project
@@ -31,6 +35,9 @@ Rscript R/scripts/report_summary.R
 - 図: `output/figures/1all_scatter.{png,pdf,svg}`（geom_count）
 - 図: `output/figures/1all_jitter.{png,pdf,svg}`（ドットゆらぎ）
 - 相関・回帰ログ: `output/logs/1all_correlation.txt`
+- 図: `output/figures/1all_scatter_nozero.{png,pdf,svg}`（CT=0/PET=0 除外）
+- 図: `output/figures/1all_jitter_nozero.{png,pdf,svg}`（CT=0/PET=0 除外、ドットゆらぎ）
+- 相関・回帰ログ: `output/logs/1all_correlation_nozero.txt`（行数とフィルタ内容付き）
 - 符号検定／Wilcoxon ログ: `output/logs/1all_nonparametric.txt`
 - 符号検定／Wilcoxon 集計表: `output/tables/1all_nonparametric.csv`
 - PET-CT 差のヒストグラム: `output/figures/1all_difference_hist.{png,pdf,svg}`

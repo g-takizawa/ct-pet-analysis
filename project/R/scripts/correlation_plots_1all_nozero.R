@@ -6,6 +6,7 @@ suppressPackageStartupMessages({
   library(ggplot2)
 })
 
+# Determine project root based on this script's location
 get_script_path <- function() {
   cmd_args <- commandArgs(trailingOnly = FALSE)
   file_arg <- "--file="
@@ -22,24 +23,30 @@ get_script_path <- function() {
 script_path <- get_script_path()
 project_root <- normalizePath(file.path(dirname(script_path), "..", ".."))
 
-input_csv <- file.path(project_root, "data", "raw", "2before_after.csv")
-figure_count_base <- file.path(project_root, "output", "figures", "2before_after_scatter")
-figure_jitter_base <- file.path(project_root, "output", "figures", "2before_after_jitter")
-log_path <- file.path(project_root, "output", "logs", "2before_after_correlation.txt")
+input_csv <- file.path(project_root, "data", "raw", "1all_data.csv")
+figure_count_base <- file.path(project_root, "output", "figures", "1all_scatter_nozero")
+figure_jitter_base <- file.path(project_root, "output", "figures", "1all_jitter_nozero")
+log_path <- file.path(project_root, "output", "logs", "1all_correlation_nozero.txt")
 
 if (!file.exists(input_csv)) {
   stop("Data file not found at ", input_csv)
 }
 
-data <- read_csv(input_csv, show_col_types = FALSE, skip = 2) %>%
-  transmute(
-    CT = as.numeric(.data$CT),
-    PET = as.numeric(.data$PET)
+# Read data (trim BOM if present) and exclude CT=0 / PET=0 cases
+data <- read_csv(input_csv, show_col_types = FALSE) %>%
+  mutate(
+    CT = as.numeric(CT),
+    PET = as.numeric(PET)
   ) %>%
   tidyr::drop_na(CT, PET)
 
+original_n <- nrow(data)
+data <- data %>%
+  filter(CT != 0, PET != 0)
+filtered_n <- nrow(data)
+
 if (nrow(data) < 3) {
-  stop("Need at least 3 observations for regression and correlation test.")
+  stop("Need at least 3 observations for regression and correlation test after filtering.")
 }
 
 lm_fit <- lm(CT ~ PET, data = data)
@@ -50,7 +57,7 @@ plot_count <- ggplot(data, aes(x = PET, y = CT)) +
   scale_size_area(max_size = 8, guide = guide_legend(title = "Count")) +
   geom_smooth(method = "lm", se = TRUE, color = "#E74C3C", fill = "#F9EBEA") +
   labs(
-    title = "PET vs CT (2before_after)",
+    title = "PET vs CT (CT/PET != 0)",
     subtitle = sprintf("Pearson r = %.3f (p = %.3g)", cor_test$estimate, cor_test$p.value),
     x = "PET",
     y = "CT"
@@ -66,7 +73,7 @@ plot_jitter <- ggplot(data, aes(x = PET, y = CT)) +
   ) +
   geom_smooth(method = "lm", se = TRUE, color = "#E74C3C", fill = "#F9EBEA") +
   labs(
-    title = "PET vs CT (2before_after, Jittered)",
+    title = "PET vs CT (CT/PET != 0, Jittered)",
     subtitle = sprintf("Pearson r = %.3f (p = %.3g)", cor_test$estimate, cor_test$p.value),
     x = "PET",
     y = "CT"
@@ -83,6 +90,8 @@ for (ext in formats) {
 log_lines <- c(
   sprintf("Date: %s", Sys.time()),
   sprintf("Input: %s", input_csv),
+  sprintf("Rows used: %d (from %d)", filtered_n, original_n),
+  "Filter: excluded rows where CT = 0 or PET = 0.",
   sprintf("Pearson correlation: %.6f", cor_test$estimate),
   sprintf("p-value: %.6g", cor_test$p.value),
   sprintf("95%% CI: [%.6f, %.6f]", cor_test$conf.int[1], cor_test$conf.int[2]),
@@ -93,6 +102,7 @@ log_lines <- c(
 dir.create(dirname(log_path), recursive = TRUE, showWarnings = FALSE)
 writeLines(log_lines, log_path)
 
-message("2before_after analysis complete. Count figure base: ", figure_count_base)
-message("2before_after analysis complete. Jitter figure base: ", figure_jitter_base)
+message("Excluded cases with CT = 0 or PET = 0 (", filtered_n, " of ", original_n, " rows used).")
+message("Analysis complete. Count figure base: ", figure_count_base)
+message("Analysis complete. Jitter figure base: ", figure_jitter_base)
 message("Correlation stats saved to ", log_path)

@@ -33,7 +33,7 @@ if (!file.exists(input_csv)) {
   stop("Data file not found at ", input_csv)
 }
 
-data <- read_csv(input_csv, show_col_types = FALSE, skip = 2) %>%
+data <- read_csv(input_csv, show_col_types = FALSE) %>%
   transmute(
     CT = as.numeric(.data$CT),
     PET = as.numeric(.data$PET),

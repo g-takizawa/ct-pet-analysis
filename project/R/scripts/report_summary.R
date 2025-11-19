@@ -23,10 +23,10 @@ project_root <- normalizePath(file.path(dirname(script_path), "..", ".."))
 
 run_analysis_scripts <- function(project_root) {
   scripts <- c(
-    "R/scripts/analyze_1all.R",
-    "R/scripts/tests_1all.R",
-    "R/scripts/analyze_2before_after.R",
-    "R/scripts/tests_2before_after.R"
+    "R/scripts/correlation_plots_1all.R",
+    "R/scripts/nonparametric_tests_1all.R",
+    "R/scripts/correlation_plots_2before_after.R",
+    "R/scripts/nonparametric_tests_2before_after.R"
   )
   old_wd <- getwd()
   on.exit(setwd(old_wd), add = TRUE)
@@ -62,7 +62,7 @@ datasets <- list(
     name = "2before_after",
     label = "2before_after データ",
     file = file.path(project_root, "data", "raw", "2before_after.csv"),
-    skip = 2L,
+    skip = 0L,
     figure_prefix = "2before_after"
   )
 )
