@@ -1,4 +1,4 @@
-Date: 2025-11-19 11:02:58.288352
+Date: 2025-11-20 12:23:38.864484
 Input: /Users/takizawahidenori/Documents/Projects/1118/project/data/raw/2before_after.csv
 Pearson correlation: 0.416655
 p-value: 5.39291e-05

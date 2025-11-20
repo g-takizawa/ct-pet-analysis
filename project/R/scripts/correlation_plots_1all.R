@@ -25,7 +25,6 @@ project_root <- normalizePath(file.path(dirname(script_path), "..", ".."))
 
 input_csv <- file.path(project_root, "data", "raw", "1all_data.csv")
 figure_count_base <- file.path(project_root, "output", "figures", "1all_scatter")
-figure_jitter_base <- file.path(project_root, "output", "figures", "1all_jitter")
 log_path <- file.path(project_root, "output", "logs", "1all_correlation.txt")
 
 if (!file.exists(input_csv)) {
@@ -59,27 +58,10 @@ plot_count <- ggplot(data, aes(x = PET, y = CT)) +
   ) +
   theme_minimal(base_size = 14)
 
-plot_jitter <- ggplot(data, aes(x = PET, y = CT)) +
-  geom_point(
-    size = 2,
-    alpha = 0.8,
-    color = "#2C3E50",
-    position = position_jitter(width = 0.15, height = 0.15)
-  ) +
-  geom_smooth(method = "lm", se = TRUE, color = "#E74C3C", fill = "#F9EBEA") +
-  labs(
-    title = "PET vs CT (Jittered)",
-    subtitle = sprintf("Pearson r = %.3f (p = %.3g)", cor_test$estimate, cor_test$p.value),
-    x = "PET",
-    y = "CT"
-  ) +
-  theme_minimal(base_size = 14)
-
 dir.create(dirname(figure_count_base), recursive = TRUE, showWarnings = FALSE)
 formats <- c("png", "pdf", "svg")
 for (ext in formats) {
   ggsave(sprintf("%s.%s", figure_count_base, ext), plot_count, width = 6, height = 4, dpi = 300)
-  ggsave(sprintf("%s.%s", figure_jitter_base, ext), plot_jitter, width = 6, height = 4, dpi = 300)
 }
 
 log_lines <- c(
@@ -95,6 +77,5 @@ log_lines <- c(
 dir.create(dirname(log_path), recursive = TRUE, showWarnings = FALSE)
 writeLines(log_lines, log_path)
 
-message("Analysis complete. Count figure base: ", figure_count_base)
-message("Analysis complete. Jitter figure base: ", figure_jitter_base)
+message("Analysis complete. Scatter figure base: ", figure_count_base)
 message("Correlation stats saved to ", log_path)

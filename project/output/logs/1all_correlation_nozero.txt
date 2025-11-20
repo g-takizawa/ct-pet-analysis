@@ -1,9 +1,0 @@
-Date: 2025-11-19 07:43:32.221152
-Input: /Users/takizawahidenori/Documents/Projects/1118/project/data/raw/1all_data.csv
-Rows used: 67 (from 176)
-Filter: excluded rows where CT = 0 or PET = 0.
-Pearson correlation: 0.296158
-p-value: 0.014958
-95% CI: [0.060234, 0.500744]
-Linear model: CT = 1.217921 + 0.297956 * PET
-Adjusted R-squared: 0.073674
