@@ -66,6 +66,7 @@ if (nrow(data) < 3) {
 
 lm_fit <- lm(CT ~ PET, data = data)
 cor_test <- cor.test(data$CT, data$PET, method = "pearson")
+spearman_test <- suppressWarnings(cor.test(data$CT, data$PET, method = "spearman", exact = FALSE))
 p_label <- sprintf("%.3g", cor_test$p.value)
 tab_ct_pet <- xtabs(~ CT + PET, data = data)
 bowker_res <- tryCatch(bowker_test(tab_ct_pet), error = function(e) NULL)
@@ -75,17 +76,23 @@ bowker_subtitle <- if (!is.null(bowker_res)) {
   "Bowker: not computed"
 }
 
-plot_count <- ggplot(data, aes(x = PET, y = CT)) +
+plot_count <- ggplot(data, aes(x = CT, y = PET)) +
   geom_count(color = "#2C3E50", alpha = 0.8) +
   scale_size_area(max_size = 12, guide = guide_legend(title = "Count")) +
   geom_smooth(method = "lm", se = TRUE, color = "#E74C3C", fill = "#F9EBEA") +
-  scale_x_continuous(labels = label_number(accuracy = 1), expand = expansion(mult = c(0.02, 0.1))) +
-  scale_y_continuous(labels = label_number(accuracy = 1)) +
+  scale_x_continuous(
+    labels = label_number(accuracy = 1),
+    expand = expansion(mult = c(0.05, 0.05))
+  ) +
+  scale_y_continuous(
+    labels = label_number(accuracy = 1),
+    expand = expansion(mult = c(0.05, 0.12))
+  ) +
   labs(
-    title = "PET vs CT (1all_data_no00)",
+    title = "CT vs PET (1all_data_no00)",
     subtitle = sprintf("Pearson r = %.3f (P = %s)", cor_test$estimate, p_label),
-    x = "PET",
-    y = "CT"
+    x = "CT",
+    y = "PET"
   ) +
   theme_minimal(base_size = 14)
 
@@ -102,7 +109,9 @@ log_lines <- c(
   sprintf("p-value: %.6g", cor_test$p.value),
   sprintf("95%% CI: [%.6f, %.6f]", cor_test$conf.int[1], cor_test$conf.int[2]),
   sprintf("Linear model: CT = %.6f + %.6f * PET", coef(lm_fit)[1], coef(lm_fit)[2]),
-  sprintf("Adjusted R-squared: %.6f", summary(lm_fit)$adj.r.squared)
+  sprintf("Adjusted R-squared: %.6f", summary(lm_fit)$adj.r.squared),
+  sprintf("Spearman rho: %.6f", spearman_test$estimate),
+  sprintf("Spearman p-value: %.6g", spearman_test$p.value)
 )
 if (!is.null(bowker_res)) {
   log_lines <- c(
@@ -147,7 +156,7 @@ heatmap_plot <- ggplot(
       CT = factor(CT, levels = ct_levels),
       PET = factor(PET, levels = pet_levels)
     ),
-  aes(x = PET, y = CT, fill = count)
+  aes(x = CT, y = PET, fill = count)
 ) +
   geom_tile(color = "white") +
   geom_text(aes(label = count), color = "black", size = 4) +
@@ -155,8 +164,8 @@ heatmap_plot <- ggplot(
   labs(
     title = "Heatmap: CT vs PET (1all_data_no00)",
     subtitle = bowker_subtitle,
-    x = "PET score",
-    y = "CT score"
+    x = "CT score",
+    y = "PET score"
   ) +
   theme_minimal(base_size = 14) +
   theme(panel.grid = element_blank())
